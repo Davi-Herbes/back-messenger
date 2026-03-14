@@ -10,5 +10,7 @@ router.post("/auth/login", login);
 router.get("/auth/logout", logout);
 
 router.get("/user/:id", loginRequired, userController.find);
+router.get("/user/search/:query", userController.search);
+
 router.post("/user", userController.register);
 router.post("/user/confirm", userController.registerConfirmation);
