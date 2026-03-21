@@ -127,7 +127,7 @@ const registerConfirmation = async (req: Request, res: Response) => {
       });
     }
 
-    const token = jwt.sign({ id }, process.env.TOKEN_SECRET as any, {
+    const token = jwt.sign({ id, email }, process.env.TOKEN_SECRET as any, {
       expiresIn: process.env.TOKEN_EXPIRATION as any,
     });
 
@@ -153,24 +153,26 @@ const registerConfirmation = async (req: Request, res: Response) => {
 
 const search = async (req: Request, res: Response) => {
   const { query } = req.params;
-  const token = req.signedCookies["auth_token"];
 
-  if (
-    !query ||
-    !(typeof query === "string") ||
-    !token ||
-    !(typeof token === "string")
-  ) {
+  if (!query || !(typeof query === "string")) {
     res.status(400);
     return res.json({
       error: "Bad request.",
     });
   }
 
+  const token = req.signedCookies["auth_token"];
+
   const payload = jwt.decode(token) as (JwtPayload & { email: string }) | null;
 
-  if (!payload || !payload.email || typeof payload.email !== "string") {
-    res.status(400);
+  if (
+    !payload ||
+    !payload.email ||
+    typeof payload.email !== "string" ||
+    !token ||
+    !(typeof token === "string")
+  ) {
+    res.status(401);
     return res.json({
       error: "Bad request.",
     });
@@ -179,15 +181,7 @@ const search = async (req: Request, res: Response) => {
   const users = await db.query.users.findMany({
     where: {
       NOT: {
-        participations: {
-          conversation: {
-            participants: {
-              participant: {
-                email: payload.email,
-              },
-            },
-          },
-        },
+        email: payload.email,
       },
       OR: [
         {

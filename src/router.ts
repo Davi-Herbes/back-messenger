@@ -21,3 +21,4 @@ router.post("/conversations/addUser", conversationController.create);
 router.get("/conversations/:userId", conversationController.findByUser);
 
 router.get("/messages/:conversationId", messagesController.findByConversation);
+router.post("/messages", messagesController.sendMessage);

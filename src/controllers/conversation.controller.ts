@@ -21,30 +21,31 @@ const findByUser = async (req: Request, res: Response) => {
     },
     columns: { id: true },
     with: {
-      participants: {
-        columns: {},
-        where: {
-          NOT: {
-            userId,
+      messages: {
+        columns: { id: true, text: true, createdAt: true },
+        orderBy: { createdAt: "desc" },
+        with: {
+          sender: {
+            columns: {
+              email: true,
+              name: true,
+            },
           },
         },
+      },
+      participants: {
+        columns: {},
         with: {
           participant: {
             columns: {
-              name: true,
               email: true,
+              name: true,
             },
-            with: {
-              messages: {
-                columns: {
-                  text: true,
-                  createdAt: true,
-                },
-                orderBy: {
-                  updatedAt: "desc",
-                },
-              },
-            },
+          },
+        },
+        where: {
+          NOT: {
+            userId,
           },
         },
       },
