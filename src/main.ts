@@ -17,10 +17,11 @@ export const io = new Server(server);
 app.use(
   cors({
     origin: [
-      "https://front-messenger-bdd18njrz-davihdmatos-9122s-projects.vercel.app",
       "https://front-messenger.vercel.app",
+      "https://front-messenger-bdd18njrz-davihdmatos-9122s-projects.vercel.app",
     ],
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
   }),
 );
@@ -49,10 +50,6 @@ app.use(cookieParser(process.env.COOKIE_SECRET || ""));
 
 app.use(router);
 // app.use('/images/', express.static(resolve(__dirname, '..', 'uploads', 'images')));
-
-io.on("connection", (socket) => {
-  console.log("a user connected");
-});
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT);
