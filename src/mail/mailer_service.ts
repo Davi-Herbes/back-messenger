@@ -16,6 +16,15 @@ export class MailService {
         rejectUnauthorized: false,
       },
     });
+
+    this.transporter.verify((error, success) => {
+      if (error) {
+        console.error("ERRO NO NODEMAILER");
+        console.error(JSON.stringify(error, null, 2));
+      } else {
+        console.log("TUDO CERTOOOOO");
+      }
+    });
   }
 
   async sendUserConfirmation(username: string, email: string, code: string) {
