@@ -18,7 +18,9 @@ app.use(
   cors({
     origin: [
       "https://front-messenger-bdd18njrz-davihdmatos-9122s-projects.vercel.app",
+      "https://front-messenger.vercel.app",
     ],
+    methods: ["GET", "POST"],
     credentials: true,
   }),
 );
