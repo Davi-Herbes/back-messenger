@@ -7,6 +7,8 @@ import { compare } from "bcrypt";
 export const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
+  console.log(email);
+
   if (
     !email ||
     !password ||
@@ -20,6 +22,7 @@ export const login = async (req: Request, res: Response) => {
   }
 
   const response = await authenticate(email, password);
+  console.log(response);
 
   if (!response) {
     res.status(400);
